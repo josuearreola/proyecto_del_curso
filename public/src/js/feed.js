@@ -77,35 +77,47 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var url = SUPABASE_URL + '/rest/v1/post?select=*';
 var networkDataReceived = false;
 
-fetch(url, {
-  headers: {
-    'apikey': SUPABASE_KEY,
-    'Authorization': 'Bearer ' + SUPABASE_KEY
-  }
-})
-  .then(function (res) {
-    return res.json();
-  })
-  .then(function (data) {
-    networkDataReceived = true;
-    console.log('From web', data);
-    var dataArray = [];
-    for (var key in data) {
-      dataArray.push(data[key]);
-    }
-    updateUI(dataArray);
-    if ('indexedDB' in window) {
-      clearAllData('posts')
-        .then(function () {
-          for (var key in data) {
-            writeData('posts', data[key]);
-          }
-        });
+function loadPosts() {
+  fetch(url, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY
     }
   })
-  .catch(function (err) {
-    console.log('Offline mode - using IndexedDB cache');
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      networkDataReceived = true;
+      console.log('From web', data);
+      var dataArray = [];
+      for (var key in data) {
+        dataArray.push(data[key]);
+      }
+      updateUI(dataArray);
+      if ('indexedDB' in window) {
+        clearAllData('posts')
+          .then(function () {
+            for (var key in data) {
+              writeData('posts', data[key]);
+            }
+          });
+      }
+    })
+    .catch(function (err) {
+      console.log('Offline mode - using IndexedDB cache');
+    });
+}
+
+loadPosts();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', function (event) {
+    if (event.data && event.data.action === 'sync-complete') {
+      loadPosts();
+    }
   });
+}
 
 if ('indexedDB' in window) {
   readAllData('posts')
@@ -135,7 +147,7 @@ function sendData() {
   })
     .then(function (res) {
       console.log('Sent data', res);
-      updateUI([]);
+      loadPosts();
     });
 }
 
@@ -147,16 +159,20 @@ form.addEventListener('submit', function (event) {
     return;
   }
 
+  var post = {
+    id: new Date().toISOString(),
+    title: titleInput.value,
+    location: locationInput.value
+  };
+
+  titleInput.value = '';
+  locationInput.value = '';
+
   closeCreatePostModal();
 
   if ('serviceWorker' in navigator && 'SyncManager' in window) {
     navigator.serviceWorker.ready
       .then(function (sw) {
-        var post = {
-          id: new Date().toISOString(),
-          title: titleInput.value,
-          location: locationInput.value
-        };
         writeData('sync-posts', post)
           .then(function () {
             return sw.sync.register('sync-new-posts');

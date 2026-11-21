@@ -1,13 +1,14 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-var CACHE_STATIC_NAME = 'static-v9';
-var CACHE_DYNAMIC_NAME = 'dynamic-v9';
+var CACHE_STATIC_NAME = 'static-v10';
+var CACHE_DYNAMIC_NAME = 'dynamic-v10';
 
 var STATIC_FILES = [
     '/',
     '/index.html',
     '/offline.html',
+    '/manifest.json',
     '/src/js/app.js',
     '/src/js/feed.js',
     '/src/js/idb.js',
@@ -16,6 +17,8 @@ var STATIC_FILES = [
     '/src/css/app.css',
     '/src/css/feed.css',
     '/src/images/main-image.png',
+    '/src/images/icons/icon-192x192.png',
+    '/src/images/icons/icon-512x512.png',
     'https://fonts.googleapis.com/css?family=Roboto:400,700',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
     'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
@@ -123,34 +126,40 @@ self.addEventListener('sync', function (event) {
         event.waitUntil(
             readAllData('sync-posts')
                 .then(function (data) {
-                    for (var dt of data) {
-                        (function (post) {
-                            fetch(SUPABASE_URL + '/rest/v1/post', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                    'apikey': SUPABASE_KEY,
-                                    'Authorization': 'Bearer ' + SUPABASE_KEY
-                                },
-                                body: JSON.stringify({
-                                    id: post.id,
-                                    title: post.title,
-                                    location: post.location,
-                                    image: 'https://xmmkfhtidsgyrebpmcij.supabase.co/storage/v1/object/public/images/sf-boat.jpg'
-                                })
+                    return Promise.all(data.map(function (post) {
+                        return fetch(SUPABASE_URL + '/rest/v1/post', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': 'Bearer ' + SUPABASE_KEY
+                            },
+                            body: JSON.stringify({
+                                id: post.id,
+                                title: post.title,
+                                location: post.location,
+                                image: 'https://xmmkfhtidsgyrebpmcij.supabase.co/storage/v1/object/public/images/sf-boat.jpg'
                             })
-                                .then(function (res) {
-                                    console.log('Sent data', res);
-                                    if (res.ok) {
-                                        deleteItemFromData('sync-posts', post.id);
-                                    }
-                                })
-                                .catch(function (err) {
-                                    console.log('Error while sending data', err);
-                                });
-                        })(dt);
-                    }
+                        })
+                            .then(function (res) {
+                                console.log('Sent data', res);
+                                if (res.ok) {
+                                    return deleteItemFromData('sync-posts', post.id);
+                                }
+                            })
+                            .catch(function (err) {
+                                console.log('Error while sending data', err);
+                            });
+                    }))
+                    .then(function () {
+                        return self.clients.matchAll();
+                    })
+                    .then(function (clients) {
+                        clients.forEach(function (client) {
+                            client.postMessage({ action: 'sync-complete' });
+                        });
+                    });
                 })
         );
     }
