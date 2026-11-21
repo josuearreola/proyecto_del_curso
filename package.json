@@ -1,0 +1,18 @@
+{
+  "name": "Proyecto UTEQGram",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server public -c-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "App sencilla parecida a Instagram",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "material-design-lite": "^1.3.0"
+  }
+}
