@@ -194,31 +194,16 @@ html_content = f"""<!DOCTYPE html>
 </head>
 <body>
 
-    <!-- PAGINA 1: Introducción y Caso de Estudio -->
+    <!-- PAGINA 1: Justificación de Plataformas y Herramientas -->
     <div class="page">
         <h1>Reporte de Caso de Estudio: Progressive Web App</h1>
         <div class="meta-data">
             <p><strong>Proyecto:</strong> UTEQGram (Aplicación Web Progresiva)</p>
-            <p><strong>Caso de Estudio:</strong> Plataforma social y colaborativa estudiantil con soporte Offline-First</p>
             <p><strong>URL de Producción:</strong> <a href="https://proyectodelcurso.vercel.app">https://proyectodelcurso.vercel.app</a></p>
             <p><strong>Repositorio GitHub:</strong> <a href="https://github.com/josuearreola/proyecto_del_curso">https://github.com/josuearreola/proyecto_del_curso</a></p>
         </div>
 
-        <h2>1. Descripción del Caso de Estudio</h2>
-        <p>
-            El proyecto <strong>UTEQGram</strong> surge de la necesidad de ofrecer a los estudiantes y docentes de la Universidad Tecnológica de Querétaro (UTEQ) una plataforma ágil, liviana y confiable para compartir vivencias y actividades institucionales. El campus universitario cuenta con diversas áreas donde la conectividad a internet móvil es inestable, de baja intensidad o nula debido a la saturación de redes locales.
-        </p>
-        <p>
-            Para dar solución integral a este reto, se diseñó e implementó una <strong>Progressive Web App (PWA)</strong> bajo una filosofía <em>Offline-First</em>. Esta arquitectura permite a la aplicación seguir operando plenamente sin conexión: los usuarios pueden visualizar publicaciones previamente almacenadas, navegar fluidamente por las distintas pantallas del sistema y redactar nuevos aportes que se resguardan de forma segura en una cola transaccional local en el dispositivo.
-        </p>
-        <p>
-            Dichos datos se sincronizan de manera transparente y automatizada con la base de datos central en la nube en cuanto el dispositivo recupera acceso a la red, brindando una experiencia de usuario idéntica a la de una aplicación nativa instalada.
-        </p>
-    </div>
-
-    <!-- PAGINA 2: Justificación de Plataformas y Herramientas -->
-    <div class="page">
-        <h2>2. Justificación de Plataformas y Herramientas Utilizadas</h2>
+        <h2>1. Justificación de Plataformas y Herramientas Utilizadas</h2>
         <p>
             Para la construcción y puesta en marcha del proyecto se seleccionaron herramientas estándar de la industria que garantizan rendimiento, mantenibilidad y nula dependencia de empaquetadores complejos:
         </p>
@@ -277,9 +262,9 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 2: Parámetros de Configuración (Parte 1: Vercel y Manifest) -->
     <div class="page">
-        <h2>3. Parámetros de Configuración de las Plataformas</h2>
+        <h2>2. Parámetros de Configuración de las Plataformas</h2>
 
-        <h3>3.1. Configuración de Despliegue en Vercel (vercel.json)</h3>
+        <h3>2.1. Configuración de Despliegue en Vercel (vercel.json)</h3>
         <p>
             Para instruir a Vercel que sirva los activos estáticos y el Service Worker desde la raíz pública sin requerir pasos de compilación complejos, se implementó el archivo de configuración en la raíz del repositorio:
         </p>
@@ -291,7 +276,7 @@ html_content = f"""<!DOCTYPE html>
             <li><strong>cleanUrls: true:</strong> Habilita el enrutamiento limpio de rutas amigables en el cliente sin requerir la extensión <code>.html</code>.</li>
         </ul>
 
-        <h3>3.2. Manifiesto de la Aplicación Web (public/manifest.json)</h3>
+        <h3>2.2. Manifiesto de la Aplicación Web (public/manifest.json)</h3>
         <p>
             Parámetro fundamental para cumplir con los criterios de instalabilidad de Google Chrome y la generación de WebAPKs en dispositivos Android:
         </p>
@@ -307,7 +292,7 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 3: Parámetros de Configuración (Parte 2: Service Worker y Supabase) -->
     <div class="page">
-        <h3>3.3. Configuración del Service Worker y Estrategias de Caché (public/sw.js)</h3>
+        <h3>2.3. Configuración del Service Worker y Estrategias de Caché (public/sw.js)</h3>
         <p>
             El Service Worker gestiona el almacenamiento en caché y la sincronización en segundo plano mediante un manejador robusto de promesas:
         </p>
@@ -320,7 +305,7 @@ html_content = f"""<!DOCTYPE html>
             <img class="vscode-img" src="{code_sw}" alt="Código sw.js en Visual Studio Code" style="max-width: 650px;">
         </div>
 
-        <h3>3.4. Configuración de Base de Datos y API en Supabase</h3>
+        <h3>2.4. Configuración de Base de Datos y API en Supabase</h3>
         <ul>
             <li><strong>Endpoint RESTful:</strong> <code>https://xmmkfhtidsgyrebpmcij.supabase.co/rest/v1/post</code></li>
             <li><strong>Esquema de Tabla post:</strong> Campos <code>id</code> (text, primary key), <code>title</code> (text), <code>location</code> (text), <code>image</code> (text).</li>
@@ -330,9 +315,9 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 4: Arquitectura de Pantallas, Vistas y Manejo de Datos -->
     <div class="page">
-        <h2>4. Arquitectura de Pantallas, Vistas y Manejo de Datos</h2>
+        <h2>3. Arquitectura de Pantallas, Vistas y Manejo de Datos</h2>
 
-        <h3>4.1. Pantallas y Home</h3>
+        <h3>3.1. Pantallas y Home</h3>
         <ul>
             <li><strong>Home / Feed Principal:</strong> Pantalla principal donde se renderiza la cabecera institucional, la imagen representativa del campus de la UTEQ, el botón flotante de publicación (+) y el contenedor dinámico de publicaciones.</li>
             <li><strong>Cajón Lateral de Navegación (Drawer):</strong> Menú colapsable adaptativo que permite desplazarse hacia el Feed, la pantalla de Ayuda y habilitar notificaciones push.</li>
@@ -340,12 +325,12 @@ html_content = f"""<!DOCTYPE html>
             <li><strong>Pantalla de Respaldo Offline (offline.html):</strong> Vista de contingencia servida por el Service Worker ante fallos de red al solicitar páginas no cacheadas.</li>
         </ul>
 
-        <h3>4.2. Vistas del Lado del Cliente (Client-Side Rendering - CSR)</h3>
+        <h3>3.2. Vistas del Lado del Cliente (Client-Side Rendering - CSR)</h3>
         <p>
             La aplicación emplea renderizado dinámico en el cliente. El archivo JavaScript <code>feed.js</code> realiza la iteración de los registros (obtenidos de la API remota o de IndexedDB) y construye dinámicamente en el DOM los elementos correspondientes mediante <code>createCard(data)</code>, aplicando los estilos de Material Design sin requerir recargas completas ni renderizado en servidor (SSR).
         </p>
 
-        <h3>4.3. Gestión de Datos: Locales, Remotos y Offline</h3>
+        <h3>3.3. Gestión de Datos: Locales, Remotos y Offline</h3>
         <table>
             <thead>
                 <tr>
@@ -376,7 +361,7 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 5: Reporte de Pruebas -->
     <div class="page">
-        <h2>5. Reporte de Pruebas</h2>
+        <h2>4. Reporte de Pruebas</h2>
         <p>
             A continuación se detalla la matriz de casos de prueba ejecutados sobre el entorno de producción desplegado en Vercel, evaluando la experiencia tanto en dispositivos móviles como en equipos de escritorio:
         </p>
@@ -447,7 +432,7 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 6: Evidencias - Dispositivos y Navegación (Figuras 1, 2, 3 Grandes y Sin Recuadro) -->
     <div class="page">
-        <h2>6. Evidencias del Caso de Estudio</h2>
+        <h2>5. Evidencias del Caso de Estudio</h2>
         <p>
             Capturas de pantalla recabadas durante la ejecución de las pruebas sobre la aplicación publicada en Vercel, evaluando la experiencia móvil y la instalabilidad en escritorio:
         </p>
@@ -471,7 +456,7 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 7: Evidencias - Service Worker y Persistencia Local (Figuras 4, 5, 6 Grandes y Sin Recuadro) -->
     <div class="page">
-        <h3>6.2. Ciclo de Vida del Service Worker y Persistencia Local</h3>
+        <h3>5.2. Ciclo de Vida del Service Worker y Persistencia Local</h3>
         
         <div class="evidence-item">
             <img class="evidence-img-large" src="{img4}" alt="Service Worker Activo" style="max-height: 220px;">
@@ -491,14 +476,14 @@ html_content = f"""<!DOCTYPE html>
 
     <!-- PAGINA 8: Evidencias - Supabase y Conclusiones -->
     <div class="page">
-        <h3>6.3. Persistencia Remota en Base de Datos Cloud (Supabase)</h3>
+        <h3>5.3. Persistencia Remota en Base de Datos Cloud (Supabase)</h3>
 
         <div class="evidence-item" style="margin-bottom: 24px;">
             <img class="evidence-img-large" src="{img7}" alt="Base de Datos Supabase" style="max-height: 320px; width: 100%;">
             <div class="evidence-caption">Figura 7. Panel de Supabase (Table Editor): Persistencia de registros en la tabla 'post' accesible vía API REST.</div>
         </div>
 
-        <h2>7. Conclusiones</h2>
+        <h2>6. Conclusiones</h2>
         <p>
             La implementación de <strong>UTEQGram</strong> demostró la efectividad de las Progressive Web Apps para entornos educativos con condiciones de red variables. Gracias a la combinación de Service Workers, IndexedDB y Background Sync, la aplicación brinda una experiencia de usuario idéntica a la de una aplicación nativa, eliminando la fricción de instalación por tiendas tradicionales y garantizando la integridad de los datos en todo momento.
         </p>
