@@ -13,12 +13,12 @@ html_template = """<!DOCTYPE html>
     margin: 0;
     padding: 20px;
     background: transparent;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
   .vscode-window {
     background-color: #1e1e1e;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     overflow: hidden;
     width: fit-content;
     min-width: 580px;
@@ -26,40 +26,58 @@ html_template = """<!DOCTYPE html>
     border: 1px solid #333333;
   }
   .vscode-header {
-    background-color: #252526;
-    padding: 0 10px;
+    background-color: #181818;
+    padding: 0;
     display: flex;
     align-items: center;
-    height: 36px;
-    border-bottom: 1px solid #191919;
+    justify-content: space-between;
+    height: 35px;
+    border-bottom: 1px solid #2b2b2b;
   }
-  .window-controls {
+  .tabs-container {
     display: flex;
-    gap: 8px;
-    margin-right: 15px;
+    align-items: center;
+    height: 100%;
   }
-  .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-  .dot-red { background-color: #ff5f56; }
-  .dot-yellow { background-color: #ffbd2e; }
-  .dot-green { background-color: #27c93f; }
   .tab {
     background-color: #1e1e1e;
     color: #ffffff;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    border-top: 2px solid #007acc;
+    padding: 0 14px;
+    height: 100%;
+    font-size: 12.5px;
+    font-family: "Segoe UI", sans-serif;
+    border-top: 1px solid #0078d4;
     display: flex;
     align-items: center;
     gap: 8px;
+    border-right: 1px solid #252525;
   }
   .file-icon {
-    font-size: 12px;
+    font-size: 13px;
     color: #cbbe80;
+    font-weight: bold;
+  }
+  .tab-close {
+    font-size: 11px;
+    color: #858585;
+    margin-left: 6px;
+    display: flex;
+    align-items: center;
+  }
+  .win-controls {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  .win-btn {
+    width: 44px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .win-btn svg {
+    display: block;
   }
   .editor {
     padding: 14px 18px;
@@ -95,19 +113,32 @@ html_template = """<!DOCTYPE html>
 </html>
 """
 
+win_buttons = """
+    <div class="win-controls">
+      <div class="win-btn">
+        <svg width="10" height="1" viewBox="0 0 10 1"><path fill="#cccccc" d="M0 0h10v1H0z"/></svg>
+      </div>
+      <div class="win-btn">
+        <svg width="10" height="10" viewBox="0 0 10 10"><path fill="none" stroke="#cccccc" stroke-width="1" d="M0.5 0.5h9v9h-9z"/></svg>
+      </div>
+      <div class="win-btn">
+        <svg width="10" height="10" viewBox="0 0 10 10"><path fill="none" stroke="#cccccc" stroke-width="1.2" d="M0 0l10 10m0-10L0 10"/></svg>
+      </div>
+    </div>
+"""
+
 snippets = {
     "vscode_vercel.png": f"""
     <div class="vscode-window" id="target">
       <div class="vscode-header">
-        <div class="window-controls">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
+        <div class="tabs-container">
+          <div class="tab">
+            <span class="file-icon">{{}}</span>
+            <span>vercel.json</span>
+            <span class="tab-close">✕</span>
+          </div>
         </div>
-        <div class="tab">
-          <span class="file-icon">{{}}</span>
-          <span>vercel.json</span>
-        </div>
+        {win_buttons}
       </div>
       <div class="editor">
         <div class="line"><span class="ln">1</span><span class="code">{{</span></div>
@@ -121,15 +152,14 @@ snippets = {
     "vscode_manifest.png": f"""
     <div class="vscode-window" id="target">
       <div class="vscode-header">
-        <div class="window-controls">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
+        <div class="tabs-container">
+          <div class="tab">
+            <span class="file-icon">{{}}</span>
+            <span>manifest.json</span>
+            <span class="tab-close">✕</span>
+          </div>
         </div>
-        <div class="tab">
-          <span class="file-icon">{{}}</span>
-          <span>manifest.json</span>
-        </div>
+        {win_buttons}
       </div>
       <div class="editor">
         <div class="line"><span class="ln">1</span><span class="code">{{</span></div>
@@ -155,15 +185,14 @@ snippets = {
     "vscode_sw_sync.png": f"""
     <div class="vscode-window" id="target">
       <div class="vscode-header">
-        <div class="window-controls">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
+        <div class="tabs-container">
+          <div class="tab">
+            <span class="file-icon" style="color:#f7df1e;">JS</span>
+            <span>sw.js</span>
+            <span class="tab-close">✕</span>
+          </div>
         </div>
-        <div class="tab">
-          <span class="file-icon" style="color:#f7df1e;">JS</span>
-          <span>sw.js</span>
-        </div>
+        {win_buttons}
       </div>
       <div class="editor">
         <div class="line"><span class="ln">119</span><span class="code"><span class="kwd">self</span>.<span class="fn">addEventListener</span>(<span class="str">'sync'</span>, <span class="kwd">function</span> (<span class="prop">event</span>) {{</span></div>
@@ -209,8 +238,8 @@ with sync_playwright() as p:
         elem = page.locator("#target")
         out_path = os.path.join(output_dir, filename)
         elem.screenshot(path=out_path)
-        print(f"Generated: {out_path}")
+        print(f"Generated Windows VS Code: {out_path}")
         
     browser.close()
 
-print("All VS Code code snippets generated successfully!")
+print("All Windows-style VS Code snippets generated successfully!")
