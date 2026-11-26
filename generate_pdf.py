@@ -10,7 +10,9 @@ def get_base64_img(filename):
     if os.path.exists(path):
         with open(path, "rb") as f:
             data = base64.b64encode(f.read()).decode("utf-8")
-            return f"data:image/jpeg;base64,{data}"
+            ext = os.path.splitext(filename)[1].lower()
+            mime = "image/png" if ext == ".png" else "image/jpeg"
+            return f"data:{mime};base64,{data}"
     return ""
 
 img1 = get_base64_img("01_home_mobile.jpg")
@@ -21,6 +23,11 @@ img5 = get_base64_img("05_indexeddb_posts.jpg")
 img6 = get_base64_img("06_indexeddb_sync_posts.jpg")
 img7 = get_base64_img("07_supabase_database.jpg")
 
+# VS Code code images
+code_vercel = get_base64_img("vscode_vercel.png")
+code_manifest = get_base64_img("vscode_manifest.png")
+code_sw = get_base64_img("vscode_sw_sync.png")
+
 html_content = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -29,7 +36,7 @@ html_content = f"""<!DOCTYPE html>
     <style>
         @page {{
             size: A4;
-            margin: 18mm 18mm 18mm 18mm;
+            margin: 16mm 18mm 16mm 18mm;
         }}
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -39,8 +46,16 @@ html_content = f"""<!DOCTYPE html>
             margin: 0;
             padding: 0;
         }}
+        .page {{
+            page-break-after: always;
+            break-after: page;
+        }}
+        .page:last-child {{
+            page-break-after: auto;
+            break-after: auto;
+        }}
         h1 {{
-            font-size: 21px;
+            font-size: 20px;
             color: #000000;
             margin-top: 0;
             margin-bottom: 12px;
@@ -49,18 +64,19 @@ html_content = f"""<!DOCTYPE html>
         h2 {{
             font-size: 16px;
             color: #000000;
-            margin-top: 18px;
-            margin-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 10px;
             font-weight: bold;
         }}
         h3 {{
-            font-size: 13px;
+            font-size: 13.5px;
             color: #000000;
             margin-top: 12px;
             margin-bottom: 6px;
             font-weight: bold;
         }}
         h1, h2, h3 {{
+            break-after: avoid;
             page-break-after: avoid;
         }}
         p {{
@@ -84,6 +100,7 @@ html_content = f"""<!DOCTYPE html>
             margin-top: 8px;
             margin-bottom: 12px;
             font-size: 12px;
+            break-inside: avoid;
             page-break-inside: avoid;
         }}
         th, td {{
@@ -100,19 +117,6 @@ html_content = f"""<!DOCTYPE html>
             font-weight: bold;
             color: #000000;
         }}
-        pre, code {{
-            font-family: Consolas, "Courier New", monospace;
-            font-size: 11px;
-            color: #000000;
-        }}
-        pre {{
-            border: 1px solid #777777;
-            padding: 6px 10px;
-            overflow-x: auto;
-            margin-top: 4px;
-            margin-bottom: 8px;
-            page-break-inside: avoid;
-        }}
         .meta-data {{
             margin-bottom: 16px;
         }}
@@ -121,333 +125,387 @@ html_content = f"""<!DOCTYPE html>
             font-size: 13px;
             color: #000000;
         }}
-        .evidence-grid {{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }}
-        .evidence-card {{
-            border: 1px solid #777777;
-            padding: 6px;
-            background: #ffffff;
-            page-break-inside: avoid;
-            margin-bottom: 6px;
-        }}
-        .evidence-card img {{
-            width: 100%;
-            height: 190px;
-            object-fit: contain;
-            display: block;
-            margin-bottom: 4px;
-            background: #ffffff;
-        }}
-        .evidence-caption {{
-            font-size: 11px;
-            font-weight: normal;
-            color: #000000;
-            text-align: center;
-        }}
         a {{
             color: #000000;
             text-decoration: underline;
+        }}
+        /* VS Code Code Images */
+        .vscode-container {{
+            margin: 8px 0 10px 0;
+            text-align: left;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }}
+        .vscode-img {{
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }}
+        /* Evidence Images - Large, No Borders */
+        .evidence-row {{
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 10px 0;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }}
+        .evidence-col {{
+            flex: 1;
+            text-align: center;
+        }}
+        .evidence-item {{
+            margin: 12px 0 16px 0;
+            text-align: center;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }}
+        .evidence-img-large {{
+            width: 96%;
+            max-width: 650px;
+            height: auto;
+            max-height: 250px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 6px auto;
+            border: none;
+            background: transparent;
+        }}
+        .evidence-img-mobile {{
+            max-width: 230px;
+            height: auto;
+            max-height: 340px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 6px auto;
+            border: none;
+            background: transparent;
+        }}
+        .evidence-caption {{
+            font-size: 11.5px;
+            color: #000000;
+            text-align: center;
+            margin-top: 4px;
         }}
     </style>
 </head>
 <body>
 
-    <h1>Reporte de Caso de Estudio: Progressive Web App</h1>
-    <div class="meta-data">
-        <p><strong>Proyecto:</strong> UTEQGram (Aplicación Web Progresiva)</p>
-        <p><strong>Caso de Estudio:</strong> Plataforma social y colaborativa estudiantil con soporte Offline-First</p>
-        <p><strong>URL de Producción:</strong> <a href="https://proyectodelcurso.vercel.app">https://proyectodelcurso.vercel.app</a></p>
-        <p><strong>Repositorio GitHub:</strong> <a href="https://github.com/josuearreola/proyecto_del_curso">https://github.com/josuearreola/proyecto_del_curso</a></p>
+    <!-- PAGINA 1: Introducción y Caso de Estudio -->
+    <div class="page">
+        <h1>Reporte de Caso de Estudio: Progressive Web App</h1>
+        <div class="meta-data">
+            <p><strong>Proyecto:</strong> UTEQGram (Aplicación Web Progresiva)</p>
+            <p><strong>Caso de Estudio:</strong> Plataforma social y colaborativa estudiantil con soporte Offline-First</p>
+            <p><strong>URL de Producción:</strong> <a href="https://proyectodelcurso.vercel.app">https://proyectodelcurso.vercel.app</a></p>
+            <p><strong>Repositorio GitHub:</strong> <a href="https://github.com/josuearreola/proyecto_del_curso">https://github.com/josuearreola/proyecto_del_curso</a></p>
+        </div>
+
+        <h2>1. Descripción del Caso de Estudio</h2>
+        <p>
+            El proyecto <strong>UTEQGram</strong> surge de la necesidad de ofrecer a los estudiantes y docentes de la Universidad Tecnológica de Querétaro (UTEQ) una plataforma ágil, liviana y confiable para compartir vivencias y actividades institucionales. El campus universitario cuenta con diversas áreas donde la conectividad a internet móvil es inestable, de baja intensidad o nula debido a la saturación de redes locales.
+        </p>
+        <p>
+            Para dar solución integral a este reto, se diseñó e implementó una <strong>Progressive Web App (PWA)</strong> bajo una filosofía <em>Offline-First</em>. Esta arquitectura permite a la aplicación seguir operando plenamente sin conexión: los usuarios pueden visualizar publicaciones previamente almacenadas, navegar fluidamente por las distintas pantallas del sistema y redactar nuevos aportes que se resguardan de forma segura en una cola transaccional local en el dispositivo.
+        </p>
+        <p>
+            Dichos datos se sincronizan de manera transparente y automatizada con la base de datos central en la nube en cuanto el dispositivo recupera acceso a la red, brindando una experiencia de usuario idéntica a la de una aplicación nativa instalada.
+        </p>
     </div>
 
-    <h2>1. Descripción del Caso de Estudio</h2>
-    <p>
-        El proyecto <strong>UTEQGram</strong> surge de la necesidad de ofrecer a los estudiantes y docentes de la Universidad Tecnológica de Querétaro (UTEQ) una plataforma ágil, liviana y confiable para compartir vivencias y actividades institucionales. El campus cuenta con áreas donde la conectividad a internet móvil es inestable o nula. 
-    </p>
-    <p>
-        Para dar solución a este reto, se diseñó e implementó una <strong>Progressive Web App (PWA)</strong> bajo una filosofía <em>Offline-First</em>. Esta arquitectura permite a la aplicación seguir operando plenamente sin conexión: los usuarios pueden visualizar publicaciones previamente almacenadas, navegar por las pantallas del sistema y redactar nuevos aportes que se resguardan de forma segura en una cola transaccional local para sincronizarse de manera transparente en cuanto la red vuelve a estar disponible.
-    </p>
+    <!-- PAGINA 2: Justificación de Plataformas y Herramientas -->
+    <div class="page">
+        <h2>2. Justificación de Plataformas y Herramientas Utilizadas</h2>
+        <p>
+            Para la construcción y puesta en marcha del proyecto se seleccionaron herramientas estándar de la industria que garantizan rendimiento, mantenibilidad y nula dependencia de empaquetadores complejos:
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Plataforma / Herramienta</th>
+                    <th style="width: 20%;">Categoría</th>
+                    <th style="width: 55%;">Justificación Técnica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>HTML5 / CSS3 / JavaScript (ES6)</strong></td>
+                    <td>Frontend Base</td>
+                    <td>Uso de tecnologías estándar nativas de la web para máxima velocidad de carga, compatibilidad multiplataforma y cero sobrecarga de frameworks externos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Material Design Lite (MDL)</strong></td>
+                    <td>Diseño UI / UX</td>
+                    <td>Proporciona una interfaz visual estructurada basada en los lineamientos Material Design de Google, con componentes adaptables a móviles (cajón de navegación, tarjetas, botones flotantes y snackbars).</td>
+                </tr>
+                <tr>
+                    <td><strong>Service Worker API</strong></td>
+                    <td>Arquitectura PWA</td>
+                    <td>Componente central que se ejecuta en un hilo separado al navegador. Intercepta el tráfico de red HTTP, gestiona el almacenamiento en caché de los activos estáticos (App Shell) y habilita el procesamiento en segundo plano.</td>
+                </tr>
+                <tr>
+                    <td><strong>IndexedDB (vía librería idb.js)</strong></td>
+                    <td>Almacenamiento Local</td>
+                    <td>Base de datos transaccional NoSQL integrada en el navegador. Supera las limitaciones de localStorage (5MB y síncrono), permitiendo persistir objetos JSON estructurados de gran tamaño de manera asíncrona.</td>
+                </tr>
+                <tr>
+                    <td><strong>Background Sync API</strong></td>
+                    <td>Sincronización Diferida</td>
+                    <td>Permite delegar peticiones de red al Service Worker mediante el evento sync, garantizando que el usuario no pierda su información al crear publicaciones sin señal.</td>
+                </tr>
+                <tr>
+                    <td><strong>Supabase (PostgreSQL & Storage)</strong></td>
+                    <td>Backend as a Service</td>
+                    <td>Proporciona una base de datos relacional robusta accesible directamente mediante API RESTful segura con cabeceras de autorización y servicio de almacenamiento en la nube para recursos multimedia.</td>
+                </tr>
+                <tr>
+                    <td><strong>Vercel</strong></td>
+                    <td>Hosting & Edge Network</td>
+                    <td>Plataforma de despliegue en la nube que suministra certificados SSL automáticos (HTTPS mandatorio para Service Workers y WebAPKs), CDN global para distribución de activos estáticos y entrega de baja latencia.</td>
+                </tr>
+                <tr>
+                    <td><strong>Git & GitHub</strong></td>
+                    <td>Control de Versiones & CI/CD</td>
+                    <td>Control de versiones distribuido que facilita la trazabilidad de cambios y se conecta de manera continua con Vercel para despliegues automatizados en cada actualización de la rama principal.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <h2>2. Justificación de Plataformas y Herramientas Utilizadas</h2>
-    <p>
-        Para la construcción y puesta en marcha del proyecto se seleccionaron herramientas estándar de la industria que garantizan rendimiento, mantenibilidad y nula dependencia de empaquetadores complejos:
-    </p>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 25%;">Plataforma / Herramienta</th>
-                <th style="width: 20%;">Categoría</th>
-                <th style="width: 55%;">Justificación Técnica</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>HTML5 / CSS3 / JavaScript (ES6)</strong></td>
-                <td>Frontend Base</td>
-                <td>Uso de tecnologías estándar nativas de la web para máxima velocidad de carga, compatibilidad multiplataforma y cero sobrecarga de frameworks externos.</td>
-            </tr>
-            <tr>
-                <td><strong>Material Design Lite (MDL)</strong></td>
-                <td>Diseño UI / UX</td>
-                <td>Proporciona una interfaz visual estructurada basada en los lineamientos Material Design de Google, con componentes adaptables a móviles (cajón de navegación, tarjetas, botones flotantes de acción y snackbars de notificación).</td>
-            </tr>
-            <tr>
-                <td><strong>Service Worker API</strong></td>
-                <td>Arquitectura PWA</td>
-                <td>Componente central que se ejecuta en un hilo separado al navegador. Intercepta el tráfico de red HTTP, gestiona el almacenamiento en caché de los activos estáticos (App Shell) y habilita el procesamiento en segundo plano.</td>
-            </tr>
-            <tr>
-                <td><strong>IndexedDB (vía librería idb.js)</strong></td>
-                <td>Almacenamiento Local</td>
-                <td>Base de datos transaccional NoSQL integrada en el navegador. Supera las limitaciones de localStorage (5MB y síncrono), permitiendo persistir objetos JSON estructurados de gran tamaño de manera asíncrona.</td>
-            </tr>
-            <tr>
-                <td><strong>Background Sync API</strong></td>
-                <td>Sincronización Diferida</td>
-                <td>Permite delegar peticiones de red al Service Worker mediante el evento sync, garantizando que el usuario no pierda su información al crear publicaciones sin señal.</td>
-            </tr>
-            <tr>
-                <td><strong>Supabase (PostgreSQL & Storage)</strong></td>
-                <td>Backend as a Service (BaaS)</td>
-                <td>Proporciona una base de datos relacional robusta accesible directamente mediante API RESTful segura con cabeceras de autorización y servicio de almacenamiento en la nube para recursos multimedia.</td>
-            </tr>
-            <tr>
-                <td><strong>Vercel</strong></td>
-                <td>Hosting & Edge Network</td>
-                <td>Plataforma de despliegue en la nube que suministra certificados SSL automáticos (HTTPS mandatorio para Service Workers y WebAPKs), CDN global para distribución de activos estáticos y entrega de baja latencia.</td>
-            </tr>
-            <tr>
-                <td><strong>Git & GitHub</strong></td>
-                <td>Control de Versiones & CI/CD</td>
-                <td>Control de versiones distribuido que facilita la trazabilidad de cambios y se conecta de manera continua con Vercel para despliegues automatizados en cada actualización de la rama principal.</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- PAGINA 2: Parámetros de Configuración (Parte 1: Vercel y Manifest) -->
+    <div class="page">
+        <h2>3. Parámetros de Configuración de las Plataformas</h2>
 
-    <h2>3. Parámetros de Configuración de las Plataformas</h2>
-
-    <h3>3.1. Configuración de Despliegue en Vercel (vercel.json)</h3>
-    <p>
-        Para instruir a Vercel que sirva los activos estáticos y el Service Worker desde la raíz pública sin requerir pasos de transpilación, se definió:
-    </p>
-    <pre>{{
-  "outputDirectory": "public",
-  "cleanUrls": true
-}}</pre>
-    <ul>
-        <li><strong>outputDirectory: "public":</strong> Indica a la red de Vercel que el directorio base de entrega es la carpeta public/, garantizando que /sw.js tenga alcance sobre la totalidad del origen /.</li>
-        <li><strong>cleanUrls: true:</strong> Habilita el enrutamiento limpio de rutas amigables en el cliente.</li>
-    </ul>
-
-    <h3>3.2. Manifiesto de la Aplicación Web (public/manifest.json)</h3>
-    <p>
-        Parámetro fundamental para cumplir con los criterios de instalabilidad de Google Chrome y Android WebAPK:
-    </p>
-    <pre>{{
-  "name": "UTEQGram",
-  "short_name": "UTEQGram",
-  "description": "App sencilla parecida a Instagram para compartir momentos",
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#ffffff",
-  "theme_color": "#3f51b5",
-  "icons": [
-    {{ "src": "/src/images/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }},
-    {{ "src": "/src/images/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }},
-    {{ "src": "/src/images/icons/icon-512x512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }}
-  ]
-}}</pre>
-
-    <h3>3.3. Configuración del Service Worker y Estrategias de Caché (public/sw.js)</h3>
-    <ul>
-        <li><strong>Control de versiones de caché:</strong> CACHE_STATIC_NAME = 'static-v10' y CACHE_DYNAMIC_NAME = 'dynamic-v10'. Garantizan la invalidación inmediata de recursos obsoletos en el evento activate.</li>
-        <li><strong>Precaching (App Shell):</strong> En el evento install se precachean de manera atómica los archivos esenciales: index.html, offline.html, manifest.json, hojas de estilo CSS, librerías JavaScript e iconos.</li>
-        <li><strong>Sincronización en segundo plano con Promise.all:</strong> El evento sync recorre el almacén sync-posts manteniendo vivo el Service Worker hasta confirmar la respuesta exitosa de Supabase:
-            <pre>self.addEventListener('sync', function (event) {{
-  if (event.tag === 'sync-new-posts') {{
-    event.waitUntil(
-      readAllData('sync-posts').then(function (data) {{
-        return Promise.all(data.map(function (post) {{
-          return fetch(SUPABASE_URL + '/rest/v1/post', {{
-            method: 'POST',
-            headers: {{ 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }},
-            body: JSON.stringify(post)
-          }}).then(function (res) {{
-            if (res.ok) return deleteItemFromData('sync-posts', post.id);
-          }});
-        }}));
-      }})
-    );
-  }}
-}});</pre>
-        </li>
-    </ul>
-
-    <h3>3.4. Configuración de Base de Datos y API en Supabase</h3>
-    <ul>
-        <li><strong>Endpoint RESTful:</strong> https://xmmkfhtidsgyrebpmcij.supabase.co/rest/v1/post</li>
-        <li><strong>Esquema de Tabla post:</strong> Campos id (text, primary key), title (text), location (text), image (text).</li>
-        <li><strong>Cabeceras de Petición HTTP:</strong> apikey y Authorization: Bearer &lt;ANON_KEY&gt; para acceso autenticado de lectura e inserción sin restricciones indebidas de CORS.</li>
-    </ul>
-
-    <h2>4. Arquitectura de Pantallas, Vistas y Manejo de Datos</h2>
-
-    <h3>4.1. Pantallas y Home</h3>
-    <ul>
-        <li><strong>Home / Feed Principal:</strong> Pantalla principal donde se renderiza la cabecera institucional, la imagen representativa del campus de la UTEQ, el botón flotante de publicación (+) y el contenedor dinámico de publicaciones.</li>
-        <li><strong>Cajón Lateral de Navegación (Drawer):</strong> Menú colapsable adaptativo que permite desplazarse hacia el Feed, la pantalla de Ayuda y habilitar notificaciones push.</li>
-        <li><strong>Modal de Creación de Publicación:</strong> Panel deslizante animado con inputs de Material Design para ingresar título y localización.</li>
-        <li><strong>Pantalla de Respaldo Offline (offline.html):</strong> Vista de contingencia servida por el Service Worker ante fallos de red al solicitar páginas no cacheadas.</li>
-    </ul>
-
-    <h3>4.2. Vistas del Lado del Cliente (Client-Side Rendering - CSR)</h3>
-    <p>
-        La aplicación emplea renderizado dinámico en el cliente. El archivo JavaScript feed.js realiza la iteración de los registros (obtenidos de la API remota o de IndexedDB) y construye dinámicamente en el DOM los elementos correspondientes mediante createCard(data), aplicando los estilos de Material Design sin requerir recargas completas ni renderizado en servidor (SSR).
-    </p>
-
-    <h3>4.3. Gestión de Datos: Locales, Remotos y Offline</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 20%;">Ámbito</th>
-                <th style="width: 30%;">Tecnología / Mecanismo</th>
-                <th style="width: 50%;">Comportamiento Implementado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Remoto (Online)</strong></td>
-                <td>Supabase REST API (PostgreSQL)</td>
-                <td>Al estar conectado, la aplicación consulta /rest/v1/post?select=* para obtener las últimas publicaciones compartidas por la comunidad universitaria.</td>
-            </tr>
-            <tr>
-                <td><strong>Local (Caché de Lectura)</strong></td>
-                <td>IndexedDB (Almacén posts)</td>
-                <td>Cada respuesta exitosa de la red actualiza de inmediato el almacén posts en el dispositivo del usuario. Si el usuario vuelve a abrir la app sin conexión, los datos se cargan al instante desde IndexedDB.</td>
-            </tr>
-            <tr>
-                <td><strong>Offline (Cola de Escritura)</strong></td>
-                <td>IndexedDB (Almacén sync-posts) + SyncManager</td>
-                <td>Si el usuario crea un post sin internet, los datos se resguardan en sync-posts y se registra el evento sync-new-posts. En cuanto la conectividad regresa, el Service Worker procesa la cola y la envía a Supabase.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2>5. Reporte de Pruebas</h2>
-    <p>
-        A continuación se detalla la matriz de casos de prueba ejecutados sobre el entorno de producción desplegado en Vercel, evaluando la experiencia tanto en dispositivos móviles como en equipos de escritorio:
-    </p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 8%;">ID</th>
-                <th style="width: 25%;">Caso de Prueba</th>
-                <th style="width: 35%;">Procedimiento Realizado</th>
-                <th style="width: 22%;">Resultado Obtenido</th>
-                <th style="width: 10%;">Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>CP-01</strong></td>
-                <td>Despliegue y entrega segura HTTPS</td>
-                <td>Ingreso a la URL https://proyectodelcurso.vercel.app desde navegador Edge y Chrome.</td>
-                <td>Carga instantánea bajo HTTPS con certificado SSL válido y activos servidos por CDN.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-            <tr>
-                <td><strong>CP-02</strong></td>
-                <td>Registro y Ciclo de Vida del Service Worker</td>
-                <td>Apertura de DevTools -> Application -> Service Workers.</td>
-                <td>Service Worker sw.js registrado con estado activo y en ejecución (ID #748) con control del cliente.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-            <tr>
-                <td><strong>CP-03</strong></td>
-                <td>Criterio de Instalabilidad PWA (Desktop)</td>
-                <td>Verificación del icono de instalación en la barra del navegador en escritorio.</td>
-                <td>El navegador muestra el botón "Instalar UTEQGram", permitiendo ejecutarla en ventana independiente sin barras de navegación.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-            <tr>
-                <td><strong>CP-04</strong></td>
-                <td>Criterio de Instalabilidad PWA (Móvil)</td>
-                <td>Navegación en dispositivo móvil y selección de "Instalar aplicación".</td>
-                <td>Descarga e instalación en el cajón de aplicaciones con icono nativo y splash screen institucional.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-            <tr>
-                <td><strong>CP-05</strong></td>
-                <td>Persistencia en Base de Datos Local IndexedDB</td>
-                <td>Inspección de DevTools -> IndexedDB -> posts-store -> posts.</td>
-                <td>Se confirman 8 registros descargados de la nube almacenados localmente para consulta offline inmediata.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-            <tr>
-                <td><strong>CP-06</strong></td>
-                <td>Creación y Encolamiento Offline</td>
-                <td>Desconexión de red (modo avión / offline en DevTools) y envío de formulario de posteo.</td>
-                <td>La publicación se guarda en sync-posts dentro de IndexedDB con notificación visual al usuario.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-            <tr>
-                <td><strong>CP-07</strong></td>
-                <td>Sincronización en Segundo Plano (Background Sync)</td>
-                <td>Reactivación del acceso a internet tras crear posts offline.</td>
-                <td>El evento sync procesa las solicitudes, confirma inserción en Supabase y limpia el almacén sync-posts.</td>
-                <td><span class="badge-success">EXITOSO</span></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2>6. Evidencias del Caso de Estudio</h2>
-    <p>
-        Capturas de pantalla recabadas durante la ejecución de las pruebas sobre la aplicación publicada en Vercel, la base de datos en la nube y los dispositivos de prueba:
-    </p>
-
-    <div class="evidence-grid">
-        <div class="evidence-card">
-            <img src="{img1}" alt="Vista Home Móvil">
-            <div class="evidence-caption">Figura 1. Vista Home en dispositivo móvil (URL Vercel y tarjetas de publicaciones).</div>
+        <h3>3.1. Configuración de Despliegue en Vercel (vercel.json)</h3>
+        <p>
+            Para instruir a Vercel que sirva los activos estáticos y el Service Worker desde la raíz pública sin requerir pasos de compilación complejos, se implementó el archivo de configuración en la raíz del repositorio:
+        </p>
+        <div class="vscode-container">
+            <img class="vscode-img" src="{code_vercel}" alt="Código vercel.json en Visual Studio Code" style="max-width: 480px;">
         </div>
-        <div class="evidence-card">
-            <img src="{img2}" alt="Menú Lateral Móvil">
-            <div class="evidence-caption">Figura 2. Menú de navegación lateral adaptativo (Drawer) con accesos a Feed y Ayuda.</div>
+        <ul>
+            <li><strong>outputDirectory: "public":</strong> Indica a la red de Vercel que el directorio base de entrega es la carpeta <code>public/</code>, garantizando que el archivo <code>/sw.js</code> tenga alcance sobre la totalidad del origen <code>/</code>.</li>
+            <li><strong>cleanUrls: true:</strong> Habilita el enrutamiento limpio de rutas amigables en el cliente sin requerir la extensión <code>.html</code>.</li>
+        </ul>
+
+        <h3>3.2. Manifiesto de la Aplicación Web (public/manifest.json)</h3>
+        <p>
+            Parámetro fundamental para cumplir con los criterios de instalabilidad de Google Chrome y la generación de WebAPKs en dispositivos Android:
+        </p>
+        <div class="vscode-container">
+            <img class="vscode-img" src="{code_manifest}" alt="Código manifest.json en Visual Studio Code" style="max-width: 620px;">
         </div>
-        <div class="evidence-card">
-            <img src="{img3}" alt="Vista Desktop con Instalación PWA">
-            <div class="evidence-caption">Figura 3. Aplicación en escritorio mostrando el botón de instalación PWA en la barra de direcciones.</div>
+        <ul>
+            <li><strong>name y short_name:</strong> Identificadores formal y abreviado de la aplicación en el sistema operativo.</li>
+            <li><strong>display: "standalone":</strong> Oculta la barra de direcciones y elementos de navegación del navegador web, ejecutando la PWA con apariencia de app nativa.</li>
+            <li><strong>icons:</strong> Matriz que define iconos de 192x192 y 512x512 píxeles, incluyendo la variante con propósito <code>maskable</code> requerida para la adaptación de iconos adaptativos en Android.</li>
+        </ul>
+    </div>
+
+    <!-- PAGINA 3: Parámetros de Configuración (Parte 2: Service Worker y Supabase) -->
+    <div class="page">
+        <h3>3.3. Configuración del Service Worker y Estrategias de Caché (public/sw.js)</h3>
+        <p>
+            El Service Worker gestiona el almacenamiento en caché y la sincronización en segundo plano mediante un manejador robusto de promesas:
+        </p>
+        <ul>
+            <li><strong>Control de versiones de caché:</strong> <code>CACHE_STATIC_NAME = 'static-v10'</code> y <code>CACHE_DYNAMIC_NAME = 'dynamic-v10'</code>. Garantizan la invalidación inmediata de recursos obsoletos en el evento <code>activate</code>.</li>
+            <li><strong>Precaching (App Shell):</strong> En el evento <code>install</code> se precachean de manera atómica los archivos esenciales: <code>index.html</code>, <code>offline.html</code>, <code>manifest.json</code>, hojas de estilo CSS, librerías JavaScript e iconos.</li>
+            <li><strong>Sincronización en segundo plano con Promise.all:</strong> El evento <code>sync</code> recorre el almacén <code>sync-posts</code> manteniendo vivo el hilo del Service Worker hasta confirmar la respuesta exitosa de Supabase:</li>
+        </ul>
+        <div class="vscode-container">
+            <img class="vscode-img" src="{code_sw}" alt="Código sw.js en Visual Studio Code" style="max-width: 650px;">
         </div>
-        <div class="evidence-card">
-            <img src="{img4}" alt="Service Worker Activo">
-            <div class="evidence-caption">Figura 4. Panel Application de DevTools: Service Worker activado y en ejecución (#748).</div>
+
+        <h3>3.4. Configuración de Base de Datos y API en Supabase</h3>
+        <ul>
+            <li><strong>Endpoint RESTful:</strong> <code>https://xmmkfhtidsgyrebpmcij.supabase.co/rest/v1/post</code></li>
+            <li><strong>Esquema de Tabla post:</strong> Campos <code>id</code> (text, primary key), <code>title</code> (text), <code>location</code> (text), <code>image</code> (text).</li>
+            <li><strong>Cabeceras de Petición HTTP:</strong> <code>apikey</code> y <code>Authorization: Bearer &lt;ANON_KEY&gt;</code> para acceso autenticado de lectura e inserción sin restricciones indebidas de CORS.</li>
+        </ul>
+    </div>
+
+    <!-- PAGINA 4: Arquitectura de Pantallas, Vistas y Manejo de Datos -->
+    <div class="page">
+        <h2>4. Arquitectura de Pantallas, Vistas y Manejo de Datos</h2>
+
+        <h3>4.1. Pantallas y Home</h3>
+        <ul>
+            <li><strong>Home / Feed Principal:</strong> Pantalla principal donde se renderiza la cabecera institucional, la imagen representativa del campus de la UTEQ, el botón flotante de publicación (+) y el contenedor dinámico de publicaciones.</li>
+            <li><strong>Cajón Lateral de Navegación (Drawer):</strong> Menú colapsable adaptativo que permite desplazarse hacia el Feed, la pantalla de Ayuda y habilitar notificaciones push.</li>
+            <li><strong>Modal de Creación de Publicación:</strong> Panel deslizante animado con inputs de Material Design para ingresar título y localización.</li>
+            <li><strong>Pantalla de Respaldo Offline (offline.html):</strong> Vista de contingencia servida por el Service Worker ante fallos de red al solicitar páginas no cacheadas.</li>
+        </ul>
+
+        <h3>4.2. Vistas del Lado del Cliente (Client-Side Rendering - CSR)</h3>
+        <p>
+            La aplicación emplea renderizado dinámico en el cliente. El archivo JavaScript <code>feed.js</code> realiza la iteración de los registros (obtenidos de la API remota o de IndexedDB) y construye dinámicamente en el DOM los elementos correspondientes mediante <code>createCard(data)</code>, aplicando los estilos de Material Design sin requerir recargas completas ni renderizado en servidor (SSR).
+        </p>
+
+        <h3>4.3. Gestión de Datos: Locales, Remotos y Offline</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Ámbito</th>
+                    <th style="width: 30%;">Tecnología / Mecanismo</th>
+                    <th style="width: 50%;">Comportamiento Implementado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Remoto (Online)</strong></td>
+                    <td>Supabase REST API (PostgreSQL)</td>
+                    <td>Al estar conectado, la aplicación consulta <code>/rest/v1/post?select=*</code> para obtener las últimas publicaciones compartidas por la comunidad universitaria.</td>
+                </tr>
+                <tr>
+                    <td><strong>Local (Caché de Lectura)</strong></td>
+                    <td>IndexedDB (Almacén posts)</td>
+                    <td>Cada respuesta exitosa de la red actualiza de inmediato el almacén <code>posts</code> en el dispositivo del usuario. Si el usuario vuelve a abrir la app sin conexión, los datos se cargan al instante desde IndexedDB.</td>
+                </tr>
+                <tr>
+                    <td><strong>Offline (Cola de Escritura)</strong></td>
+                    <td>IndexedDB (Almacén sync-posts) + SyncManager</td>
+                    <td>Si el usuario crea un post sin internet, los datos se resguardan en <code>sync-posts</code> y se registra el evento <code>sync-new-posts</code>. En cuanto la conectividad regresa, el Service Worker procesa la cola y la envía a Supabase.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGINA 5: Reporte de Pruebas -->
+    <div class="page">
+        <h2>5. Reporte de Pruebas</h2>
+        <p>
+            A continuación se detalla la matriz de casos de prueba ejecutados sobre el entorno de producción desplegado en Vercel, evaluando la experiencia tanto en dispositivos móviles como en equipos de escritorio:
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 8%;">ID</th>
+                    <th style="width: 25%;">Caso de Prueba</th>
+                    <th style="width: 35%;">Procedimiento Realizado</th>
+                    <th style="width: 22%;">Resultado Obtenido</th>
+                    <th style="width: 10%;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>CP-01</strong></td>
+                    <td>Despliegue y entrega segura HTTPS</td>
+                    <td>Ingreso a la URL <code>https://proyectodelcurso.vercel.app</code> desde navegador Edge y Chrome.</td>
+                    <td>Carga instantánea bajo HTTPS con certificado SSL válido y activos servidos por CDN.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-02</strong></td>
+                    <td>Registro y Ciclo de Vida del Service Worker</td>
+                    <td>Apertura de DevTools -> Application -> Service Workers.</td>
+                    <td>Service Worker <code>sw.js</code> registrado con estado activo y en ejecución (ID #748) con control del cliente.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-03</strong></td>
+                    <td>Criterio de Instalabilidad PWA (Desktop)</td>
+                    <td>Verificación del icono de instalación en la barra del navegador en escritorio.</td>
+                    <td>El navegador muestra el botón "Instalar UTEQGram", permitiendo ejecutarla en ventana independiente sin barras de navegación.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-04</strong></td>
+                    <td>Criterio de Instalabilidad PWA (Móvil)</td>
+                    <td>Navegación en dispositivo móvil y selección de "Instalar aplicación".</td>
+                    <td>Descarga e instalación en el cajón de aplicaciones con icono nativo y splash screen institucional.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-05</strong></td>
+                    <td>Persistencia en Base de Datos Local IndexedDB</td>
+                    <td>Inspección de DevTools -> IndexedDB -> <code>posts-store</code> -> <code>posts</code>.</td>
+                    <td>Se confirman 8 registros descargados de la nube almacenados localmente para consulta offline inmediata.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-06</strong></td>
+                    <td>Creación y Encolamiento Offline</td>
+                    <td>Desconexión de red (modo avión / offline en DevTools) y envío de formulario de posteo.</td>
+                    <td>La publicación se guarda en <code>sync-posts</code> dentro de IndexedDB con notificación visual al usuario.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-07</strong></td>
+                    <td>Sincronización en Segundo Plano (Background Sync)</td>
+                    <td>Reactivación del acceso a internet tras crear posts offline.</td>
+                    <td>El evento <code>sync</code> procesa las solicitudes, confirma inserción en Supabase y limpia el almacén <code>sync-posts</code>.</td>
+                    <td><span class="badge-success">EXITOSO</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGINA 6: Evidencias - Dispositivos y Navegación (Figuras 1, 2, 3 Grandes y Sin Recuadro) -->
+    <div class="page">
+        <h2>6. Evidencias del Caso de Estudio</h2>
+        <p>
+            Capturas de pantalla recabadas durante la ejecución de las pruebas sobre la aplicación publicada en Vercel, evaluando la experiencia móvil y la instalabilidad en escritorio:
+        </p>
+
+        <div class="evidence-row">
+            <div class="evidence-col">
+                <img class="evidence-img-mobile" src="{img1}" alt="Vista Home Móvil">
+                <div class="evidence-caption">Figura 1. Vista Home en dispositivo móvil (URL en producción y feed de publicaciones).</div>
+            </div>
+            <div class="evidence-col">
+                <img class="evidence-img-mobile" src="{img2}" alt="Menú Lateral Móvil">
+                <div class="evidence-caption">Figura 2. Menú de navegación lateral adaptativo (Drawer) con accesos directos.</div>
+            </div>
         </div>
-        <div class="evidence-card">
-            <img src="{img5}" alt="IndexedDB Posts">
-            <div class="evidence-caption">Figura 5. Almacén IndexedDB 'posts': Persistencia de publicaciones remotas para consulta offline.</div>
-        </div>
-        <div class="evidence-card">
-            <img src="{img6}" alt="IndexedDB Sync Posts">
-            <div class="evidence-caption">Figura 6. Almacén IndexedDB 'sync-posts': Cola de sincronización en segundo plano con registros pendientes.</div>
-        </div>
-        <div class="evidence-card" style="grid-column: span 2;">
-            <img src="{img7}" alt="Base de Datos Supabase" style="height: 230px;">
-            <div class="evidence-caption">Figura 7. Panel de Supabase (Table Editor): Persistencia remota en la tabla 'post' con 8 registros confirmados.</div>
+
+        <div class="evidence-item" style="margin-top: 14px;">
+            <img class="evidence-img-large" src="{img3}" alt="Vista Desktop con Instalación PWA" style="max-height: 230px;">
+            <div class="evidence-caption">Figura 3. Aplicación en escritorio mostrando el botón de instalación PWA en la barra de direcciones del navegador.</div>
         </div>
     </div>
 
-    <h2>7. Conclusiones</h2>
-    <p>
-        La implementación de <strong>UTEQGram</strong> demostró la efectividad de las Progressive Web Apps para entornos educativos con condiciones de red variables. Gracias a la combinación de Service Workers, IndexedDB y Background Sync, la aplicación brinda una experiencia de usuario idéntica a la de una aplicación nativa, eliminando la fricción de instalación por tiendas tradicionales y garantizando la integridad de los datos en todo momento.
-    </p>
+    <!-- PAGINA 7: Evidencias - Service Worker y Persistencia Local (Figuras 4, 5, 6 Grandes y Sin Recuadro) -->
+    <div class="page">
+        <h3>6.2. Ciclo de Vida del Service Worker y Persistencia Local</h3>
+        
+        <div class="evidence-item">
+            <img class="evidence-img-large" src="{img4}" alt="Service Worker Activo" style="max-height: 220px;">
+            <div class="evidence-caption">Figura 4. Panel Application de DevTools: Service Worker registrado, activado y en ejecución (#748).</div>
+        </div>
+
+        <div class="evidence-item">
+            <img class="evidence-img-large" src="{img5}" alt="IndexedDB Posts" style="max-height: 220px;">
+            <div class="evidence-caption">Figura 5. Almacén IndexedDB 'posts': Persistencia de publicaciones remotas para consulta offline inmediata.</div>
+        </div>
+
+        <div class="evidence-item">
+            <img class="evidence-img-large" src="{img6}" alt="IndexedDB Sync Posts" style="max-height: 200px;">
+            <div class="evidence-caption">Figura 6. Almacén IndexedDB 'sync-posts': Cola de sincronización en segundo plano con registros diferidos.</div>
+        </div>
+    </div>
+
+    <!-- PAGINA 8: Evidencias - Supabase y Conclusiones -->
+    <div class="page">
+        <h3>6.3. Persistencia Remota en Base de Datos Cloud (Supabase)</h3>
+
+        <div class="evidence-item" style="margin-bottom: 24px;">
+            <img class="evidence-img-large" src="{img7}" alt="Base de Datos Supabase" style="max-height: 320px; width: 100%;">
+            <div class="evidence-caption">Figura 7. Panel de Supabase (Table Editor): Persistencia de registros en la tabla 'post' accesible vía API REST.</div>
+        </div>
+
+        <h2>7. Conclusiones</h2>
+        <p>
+            La implementación de <strong>UTEQGram</strong> demostró la efectividad de las Progressive Web Apps para entornos educativos con condiciones de red variables. Gracias a la combinación de Service Workers, IndexedDB y Background Sync, la aplicación brinda una experiencia de usuario idéntica a la de una aplicación nativa, eliminando la fricción de instalación por tiendas tradicionales y garantizando la integridad de los datos en todo momento.
+        </p>
+        <p>
+            El despliegue automatizado en Vercel sobre HTTPS junto a la persistencia en la nube provista por Supabase proporciona una solución integral, escalable y mantenible para la comunidad de la UTEQ.
+        </p>
+    </div>
 
 </body>
 </html>
