@@ -160,3 +160,6 @@ La aplicación utiliza renderizado del lado del cliente (Client-Side Rendering):
 
 ### 6. Cola de Publicaciones Offline en IndexedDB (`sync-posts`)
 ![IndexedDB Sync Posts](docs/screenshots/06_indexeddb_sync_posts.jpg)
+
+### 7. Base de Datos en Supabase (Persistencia Remota)
+![Base de Datos Supabase](docs/screenshots/07_supabase_database.jpg)
